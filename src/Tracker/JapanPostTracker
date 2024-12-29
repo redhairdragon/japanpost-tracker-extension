@@ -1,0 +1,36 @@
+class JapanPostTracker {
+    constructor() {
+        this.baseUrl = 'https://trackings.post.japanpost.jp/services/srv/search';
+    }
+
+    async getTrackingStatus(trackingNumbers) {
+        if (!Array.isArray(trackingNumbers) || trackingNumbers.length === 0) {
+            throw new Error('Invalid tracking numbers');
+        }
+
+        const params = trackingNumbers.map((num, index) => `requestNo${index + 1}=${num}`).join('&');
+        const url = `${this.baseUrl}?${params}&search.x=125&search.y=13&locale=en&startingUrlPatten=`;
+
+        try {
+            const response = await fetch(url);
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            const text = await response.text();
+            return this.parseTrackingStatus(text);
+        } catch (error) {
+            console.error('Failed to fetch tracking status:', error);
+            return null;
+        }
+    }
+
+    parseTrackingStatus(html) {
+        // Implement parsing logic here
+        // This is a placeholder implementation
+        const parser = new DOMParser();
+        const doc = parser.parseFromString(html, 'text/html');
+        const status = doc.querySelector('.status').innerText;
+        const lastUpdate = doc.querySelector('.last-update').innerText;
+        return { status, lastUpdate };
+    }
+}
