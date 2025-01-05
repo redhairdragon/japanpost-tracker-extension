@@ -12,5 +12,8 @@
   },
   "background": {
     "service_worker": "src/background.js"
-  }
+  },
+  "host_permissions": [
+    "https://trackings.post.japanpost.jp/"
+  ]
 }

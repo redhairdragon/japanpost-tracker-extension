@@ -10,6 +10,7 @@ This Chrome extension allows users to track multiple JapanPost parcels efficient
 - Display a grid of tracking items with the latest status and last update time
 - Remove tracking items from the list
 
+- Detect. Arrive in US/-> check USPS
 
 ## Installation
 
