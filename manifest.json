@@ -5,7 +5,9 @@
   "description": "A Chrome extension for tracking multiple JapanPost parcels.",
   "permissions": [
     "storage",
-    "activeTab"
+    "activeTab",
+    "tabs",
+    "scripting"
   ],
   "action": {
     "default_popup": "src/popup.html"
@@ -15,5 +17,11 @@
   },
   "host_permissions": [
     "https://trackings.post.japanpost.jp/"
+  ],
+  "content_scripts": [
+    {
+      "matches": ["https://trackings.post.japanpost.jp/*"],
+      "js": ["src/content.js"]
+    }
   ]
 }

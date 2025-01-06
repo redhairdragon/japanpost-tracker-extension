@@ -15,6 +15,9 @@ function attachRemoveButtons() {
         button.addEventListener('click', (e) => {
             const index = e.target.getAttribute('data-index');
             trackingItems.splice(index, 1);
+            save_tracking_data_to_storage(trackingItems).then(() => {
+                console.log('Remove Save completed');
+            });
             updateTrackingList();
         });
     });
@@ -48,6 +51,20 @@ load_tracking_data_from_storage().then(items => {
 
 
 document.addEventListener('DOMContentLoaded', () => {
+    const port = chrome.runtime.connect({ name: "popup" });
+    port.onMessage.addListener((message) => {
+        if (message.trackingNumber) {
+            console.log('1Received tracking number:', message.trackingNumber);
+            trackingInput.value = message.trackingNumber;
+        }
+    });
+
+    chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
+        if (message.trackingNumber) {
+            console.log('Received tracking number:', message.trackingNumber);
+            trackingInput.value = message.trackingNumber;
+        }
+    });
     form.addEventListener('submit', (e) => {
         e.preventDefault();
 
@@ -76,7 +93,7 @@ document.addEventListener('DOMContentLoaded', () => {
             jppostStatus.history = trackingInfo.history;
             updateTrackingList();
             save_tracking_data_to_storage(trackingItems).then(() => {
-                console.log('Save completed');
+                console.log('Add Save completed');
             });
         });
         updateTrackingList();
